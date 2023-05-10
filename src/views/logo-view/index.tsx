@@ -11,15 +11,11 @@ interface LogoViewProp {
 
 const LogoImg = styled('img')(() => ({
   width: 'auto',
-  height: 20
+  height: 30
 }))
 
 const LogoView = (props: LogoViewProp) => {
   const { colorTheme = true } = props
-
-
-  console.log('Comp: ');
-
 
   return (
     <>

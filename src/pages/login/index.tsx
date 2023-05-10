@@ -1,5 +1,5 @@
 // ** React Imports
-import { ReactNode/*, useEffect*/, useState } from 'react'
+import { ReactNode /*, useEffect*/, useState } from 'react'
 
 // ** Next Imports
 import { useRouter } from 'next/router'
@@ -8,7 +8,6 @@ import { useRouter } from 'next/router'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import { styled } from '@mui/material/styles'
 import MuiCard, { CardProps } from '@mui/material/Card'
@@ -17,73 +16,104 @@ import MuiCard, { CardProps } from '@mui/material/Card'
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
-import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
+import { LoginBgIllustration } from 'src/views/pages/auth/LoginIllustration'
 
-import { cnpj, cpf } from 'magic-masks';
-import { validateBr } from 'js-brasil';
+import { cnpj, cpf } from 'magic-masks'
+import { validateBr } from 'js-brasil'
 
 import { login } from 'src/back/iGateway'
 import { useSettings } from 'src/@core/hooks/useSettings'
 import Snackbar from '@mui/material/Snackbar'
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import MuiAlert, { AlertProps } from '@mui/material/Alert'
 import React from 'react'
+import LogoView from 'src/views/logo-view'
+
+interface LoginProps {
+  acessKey: string
+  cnpjCpf: string
+}
 
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
-  [theme.breakpoints.up('sm')]: { width: '28rem' }
+  [theme.breakpoints.up('sm')]: { width: '28rem' },
+  backgroundColor: theme.palette.primary.main,
+  padding: theme.spacing(7, 9, 5),
+  boxShadow: '0px 2.77154px 17.3221px rgba(0, 0, 0, 0.25)',
+  borderRadius: '30px'
 }))
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
-  props,
-  ref,
-) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
+const CardContentLogin = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.common.white,
+  borderRadius: 18,
+  padding: '32px 20px'
+}))
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />
+})
+
+const WelcomeText = styled('p')(() => ({
+  fontSize: 16,
+  fontWeight: 400,
+  margin: 0
+}))
+const TitleWelcomeText = styled('p')(() => ({
+  fontSize: 22,
+  fontWeight: 700,
+  margin: 0
+}))
+const CaptionWelcomeText = styled('p')(() => ({
+  fontSize: 12,
+  fontWeight: 400,
+  marginTop: 0
+}))
 
 const LoginPage = () => {
-
   // ** Hook
   const router = useRouter()
+  const [formStateLogin, setFormStateLogin] = useState<LoginProps>({
+    acessKey: '',
+    cnpjCpf: ''
+  })
 
-  const [cnpjCpf,setCnpjCpf] = useState("")
-  const [acessKey,setAcessKey] = useState("")
-
-  const [openErroLogin, setOpenErroLogin] = useState(false);
-  const [openErroIPT, setOpenErroIPT] = useState(false);
-  const [openErroLoginGenerico, setOpenErroLoginGenerico] = useState(false);
+  const [openErroLogin, setOpenErroLogin] = useState(false)
+  const [openErroIPT, setOpenErroIPT] = useState(false)
+  const [openErroLoginGenerico, setOpenErroLoginGenerico] = useState(false)
 
   const { infoIgateway, igatewayPort, reloadInfoIgateway } = useSettings()
 
-//  const { statusIgateway} = infoIgateway
+  // const { statusIgateway } = infoIgateway
 
-//  useEffect(()=>{
-//    if (['RUN','STOP'].includes(statusIgateway as string)) router.push('/dashboard')
-//    if (statusIgateway=='ERRO') router.push('/errorIgateway')
-//  },[statusIgateway])
+  //  useEffect(()=>{
+  //    if (['RUN','STOP'].includes(statusIgateway as string)) router.push('/dashboard')
+  //    if (statusIgateway=='ERRO') router.push('/errorIgateway')
+  //  },[statusIgateway])
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
-      return;
+      return
     }
-    setOpenErroLogin(false);
-    setOpenErroIPT(false);
-    setOpenErroLoginGenerico(false);
-  };
+    setOpenErroLogin(false)
+    setOpenErroIPT(false)
+    setOpenErroLoginGenerico(false)
+  }
 
   async function acessar() {
-    const retLogin = await login(acessKey,cnpjCpf.replace(/[/.-]/g, ''),igatewayPort as string)
-    switch (retLogin) {
-      case 'ERROLOGIN' :
+    const cnpjCpfSemPontos = formStateLogin.cnpjCpf.replace(/[/.-]/g, '')
+    const loginResult = await login(formStateLogin.acessKey, cnpjCpfSemPontos, igatewayPort as string)
+
+    switch (loginResult) {
+      case 'ERROLOGIN':
         setOpenErroLogin(true)
         break
-      case 'ERROIPT' :
+      case 'ERROIPT':
         setOpenErroIPT(true)
         break
-      case 'ERROIGATEWAY' :
+      case 'ERROIGATEWAY':
         router.push('/errorIgateway')
         break
-      default :
-        if (retLogin.substr(0,3)=='db_') {
+      default:
+        if (loginResult.startsWith('db_')) {
           await reloadInfoIgateway()
           router.push('/dashboard')
         } else {
@@ -92,29 +122,18 @@ const LoginPage = () => {
     }
   }
 
-  return (
-    infoIgateway ?
-      <Box className='content-center'>
-        <Card sx={{ zIndex: 1 }}>
-          <CardContent sx={{ padding: theme => `${theme.spacing(12, 9, 7)} !important` }}>
-            <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Typography
-                variant='h6'
-                sx={{
-                  ml: 3,
-                  lineHeight: 1,
-                  fontWeight: 600,
-                  fontSize: '1.5rem !important'
-                }}
-              >
-                iGateway DashBoard
-              </Typography>
-            </Box>
+  return infoIgateway ? (
+    <Box className='content-center'>
+      <Card sx={{ zIndex: 1 }}>
+        <CardContent>
+          <Box sx={{ mb: 8, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <LogoView colorTheme={false} />
+          </Box>
+          <CardContentLogin>
             <Box sx={{ mb: 6 }}>
-              <Typography variant='h6' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-                Bem vindo! 👋🏻
-              </Typography>
-              <Typography variant='body2'>Por favor, informe a chave de acesso e o CNPJ/CPF.</Typography>
+              <WelcomeText>Bem vindo ao</WelcomeText>
+              <TitleWelcomeText>iGateway Inspell</TitleWelcomeText>
+              <CaptionWelcomeText>Por favor, informe os dados para acesso</CaptionWelcomeText>
             </Box>
             <TextField
               autoFocus
@@ -122,8 +141,9 @@ const LoginPage = () => {
               id='acessKey'
               label='Chave de Acesso'
               sx={{ marginBottom: 4 }}
+              value={formStateLogin.acessKey}
               onChange={e => {
-                setAcessKey(e.target.value)
+                setFormStateLogin({ ...formStateLogin, acessKey: e.currentTarget.value || '' })
               }}
             />
             <TextField
@@ -131,17 +151,17 @@ const LoginPage = () => {
               id='cnpjCpf'
               label='CNPJ/CPF'
               sx={{ marginBottom: 4 }}
+              value={formStateLogin.cnpjCpf}
               onChange={e => {
-                if (e.target.value.length==14 &&
-                  validateBr.cpf(cpf(e.target.value.replaceAll('.','').replaceAll('/','')))) {
-                    e.target.value = cpf(e.target.value)
-                } else {
-                    e.target.value = cnpj(e.target.value)
-                }
-                setCnpjCpf(e.target.value)
+                const formattedValue = e.target.value.replaceAll('.', '').replaceAll('/', '')
+
+                const isCpfValid = validateBr.cpf(cpf(formattedValue))
+                const updatedValue = isCpfValid ? cpf(formattedValue) : cnpj(formattedValue)
+
+                setFormStateLogin({ ...formStateLogin, cnpjCpf: updatedValue || '' })
               }}
               onKeyUp={e => {
-                if (e.key=='Enter') acessar()
+                if (e.key == 'Enter') acessar()
               }}
             />
             <Button
@@ -150,31 +170,36 @@ const LoginPage = () => {
               variant='contained'
               sx={{ mb: 4, mt: 2 }}
               onClick={acessar}
-              disabled={acessKey.length<5 || (!validateBr.cpf(cnpjCpf) && !validateBr.cnpj(cnpjCpf))}
+              disabled={
+                formStateLogin.acessKey.length < 5 ||
+                (!validateBr.cpf(formStateLogin.cnpjCpf) && !validateBr.cnpj(formStateLogin.cnpjCpf))
+              }
             >
               Acessar
             </Button>
-          </CardContent>
-        </Card>
-        <FooterIllustrationsV1 />
-          <Snackbar open={openErroLogin} autoHideDuration={6000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
-              Chave de acesso ou CNPJ/CPF inválidos!
-            </Alert>
-          </Snackbar>
-          <Snackbar open={openErroLoginGenerico} autoHideDuration={10000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-              Erro no processo de Login!
-            </Alert>
-          </Snackbar>
-          <Snackbar open={openErroIPT} autoHideDuration={10000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-              Erro ao acessar servidor do iPonto!
-            </Alert>
-          </Snackbar>
-      </Box>
-    :
-      <></>
+          </CardContentLogin>
+        </CardContent>
+      </Card>
+      <LoginBgIllustration />
+
+      <Snackbar open={openErroLogin} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity='warning' sx={{ width: '100%' }}>
+          Chave de acesso ou CNPJ/CPF inválidos!
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openErroLoginGenerico} autoHideDuration={10000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
+          Erro no processo de Login!
+        </Alert>
+      </Snackbar>
+      <Snackbar open={openErroIPT} autoHideDuration={10000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity='error' sx={{ width: '100%' }}>
+          Erro ao acessar servidor do iPonto!
+        </Alert>
+      </Snackbar>
+    </Box>
+  ) : (
+    <></>
   )
 }
 
