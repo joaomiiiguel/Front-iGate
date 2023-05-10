@@ -17,7 +17,7 @@ const Card = (theme: Theme) => {
     MuiCardHeader: {
       styleOverrides: {
         root: {
-          padding: theme.spacing(5),
+          padding: theme.spacing(0),
           '& + .MuiCardContent-root, & + .MuiCollapse-root .MuiCardContent-root': {
             paddingTop: 0
           },
@@ -26,10 +26,13 @@ const Card = (theme: Theme) => {
           }
         },
         title: {
-          lineHeight: 1,
+          lineHeight: '2rem',
           fontWeight: 500,
-          fontSize: '1.25rem',
-          letterSpacing: '0.0125em'
+          letterSpacing: '0.15px',
+          fontSize: '0.87rem',
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.primary.contrastText,
+          paddingLeft: theme.spacing(5)
         },
         action: {
           marginTop: 0,

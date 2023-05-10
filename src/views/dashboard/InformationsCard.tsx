@@ -56,7 +56,7 @@ const InformationsCard = (props: any) => {
     {
       stats: marksOnDay(),
       title: 'Marcações no dia',
-      color: 'primary',
+      color: 'tertiary',
       icon: <NoteCheckOutline sx={{ fontSize: '1.75rem' }} />
     },
     {

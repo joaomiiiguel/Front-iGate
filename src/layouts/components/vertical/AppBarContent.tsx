@@ -8,6 +8,8 @@ import { InfoIgateway, Settings } from 'src/@core/context/settingsContext'
 import ModeToggler from 'src/@core/layouts/components/shared-components/ModeToggler'
 import PlacesDropdown from 'src/@core/layouts/components/shared-components/PlacesDropdown'
 
+import LogoView from 'src/views/logo-view'
+
 import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 import { cnpj, cpf } from 'magic-masks'
@@ -39,7 +41,7 @@ const AppBarContent = (props: Props) => {
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
       <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
-        <Typography variant={'h5'}>iGateway Dashboard</Typography>
+        <LogoView colorTheme={settings.mode === 'light' ? true : false}/>
       </Box>
       <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
         {!hiddenMd && <Tooltip title='CNPJ/CPF da conta' arrow>

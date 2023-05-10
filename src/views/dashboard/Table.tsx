@@ -48,10 +48,6 @@ const DashboardTable = (props:any) => {
     <Card>
       <CardHeader
         title='Coletores'
-        sx={{pb:'0px'}}
-        titleTypographyProps={{
-          sx: { lineHeight: '2rem !important', letterSpacing: '0.15px !important' }
-        }}
       />
       <TableContainer>
         <Table sx={{ minWidth: 800 }} aria-label='table in dashboard'>
@@ -68,6 +64,7 @@ const DashboardTable = (props:any) => {
           <TableBody>
             {rows.map((row: RowType) => {
               if (!['ONLINE','ERRO','ERRO_SENHA','ERRO_NS'].includes(row.STATUS)) row.STATUS='DESCONHECIDO';
+
               return (
                 <TableRow hover key={row.CODTERMINAL} sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}>
                   <TableCell align='center'>{row.CODTERMINAL}</TableCell>

@@ -3,7 +3,7 @@ import { InfoIgateway, Settings } from 'src/@core/context/settingsContext'
 
 export type ContentWidth = 'full' | 'boxed'
 
-export type ThemeColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success'
+export type ThemeColor = 'primary' | 'secondary'| 'tertiary' | 'error' | 'warning' | 'info' | 'success'
 
 export type NavLink = {
   path?: string

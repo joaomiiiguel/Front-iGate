@@ -30,11 +30,11 @@ const WeeklyOverview = (props:any) => {
 
   const optionsColors = [
     theme.palette.warning.main,
-    theme.palette.primary.main,
+    theme.palette.tertiary.main,
     theme.palette.secondary.main,
     theme.palette.success.main,
     theme.palette.warning.dark,
-    theme.palette.primary.dark,
+    theme.palette.tertiary.dark,
     theme.palette.success.dark,
     theme.palette.success.dark
   ]
@@ -74,11 +74,11 @@ const WeeklyOverview = (props:any) => {
     // Colors
     colors: [
       theme.palette.warning.main,
-      theme.palette.primary.main,
+      theme.palette.tertiary.main,
       theme.palette.secondary.main,
       theme.palette.success.dark,
       theme.palette.warning.dark,
-      theme.palette.primary.dark,
+      theme.palette.tertiary.dark,
       theme.palette.success.dark
     ],
 
@@ -195,10 +195,6 @@ const WeeklyOverview = (props:any) => {
     <Card>
       <CardHeader
         title='Marcações nos últimos 7 dias'
-        sx = {{pb: '0px'}}
-        titleTypographyProps={{
-          sx: { lineHeight: '2rem !important', letterSpacing: '0.15px !important' }
-        }}
       />
       <CardContent sx={{ '& .apexcharts-xcrosshairs.apexcharts-active': { opacity: 0 } }}>
         <ReactApexChart type='bar' series={chartData} options={chartOptions} height={300} />
