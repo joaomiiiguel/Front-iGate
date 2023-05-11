@@ -50,6 +50,7 @@ const themeOptions = (settings: Settings): ThemeOptions => {
     palette: {
       primary: {
         ...themeConfig.palette[themeColor],
+
 //        main: 'primary'
 //        main: '#2E3B52'  //Alteração da cor primária
       }

@@ -30,11 +30,11 @@ const WeeklyOverview = (props:any) => {
 
   const optionsColors = [
     theme.palette.warning.main,
-    theme.palette.tertiary.main,
+    theme.palette.primary.main,
     theme.palette.secondary.main,
     theme.palette.success.main,
     theme.palette.warning.dark,
-    theme.palette.tertiary.dark,
+    theme.palette.primary.dark,
     theme.palette.success.dark,
     theme.palette.success.dark
   ]
@@ -74,11 +74,11 @@ const WeeklyOverview = (props:any) => {
     // Colors
     colors: [
       theme.palette.warning.main,
-      theme.palette.tertiary.main,
+      theme.palette.primary.main,
       theme.palette.secondary.main,
       theme.palette.success.dark,
       theme.palette.warning.dark,
-      theme.palette.tertiary.dark,
+      theme.palette.primary.dark,
       theme.palette.success.dark
     ],
 
